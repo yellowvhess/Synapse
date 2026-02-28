@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Synapse P2P</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --term-green: #00ff41;
+            --term-dim: #008F11;
+            --alert: #ff0055;
+            --font-main: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--term-green);
+            font-family: var(--font-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Scanlines Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        header {
+            padding: 20px;
+            border-bottom: 1px solid var(--term-dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; text-shadow: 0 0 5px var(--term-green); }
+
+        #status { font-weight: bold; color: var(--alert); }
+        #status.secure { color: var(--term-green); }
+
+        #chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            max-width: 70%;
+            padding: 10px;
+            border: 1px solid var(--term-dim);
+            background: rgba(0, 255, 65, 0.05);
+        }
+        
+        .msg.local { align-self: flex-end; border-color: var(--term-green); }
+        .msg.remote { align-self: flex-start; border-style: dashed; }
+        .system { align-self: center; color: var(--term-dim); font-size: 0.8rem; border: none; }
+
+        #controls {
+            padding: 20px;
+            border-top: 1px solid var(--term-dim);
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            background: #000;
+            border: 1px solid var(--term-dim);
+            color: var(--term-green);
+            padding: 10px;
+            font-family: var(--font-main);
+            outline: none;
+        }
+
+        button {
+            background: var(--term-dim);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: var(--font-main);
+            transition: 0.2s;
+        }
+
+        button:hover { background: var(--term-green); box-shadow: 0 0 10px var(--term-green); }
+        
+        #file-input { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SYNAPSE<span style="font-size:0.6em; opacity:0.7;">v1.0</span></h1>
+    <div id="connection-info">
+        STATUS: <span id="status">DISCONNECTED</span>
+    </div>
+</header>
+
+<div id="chat-area">
+    <div class="msg system">Initializing Cryptographic Subsystem...</div>
+</div>
+
+<div id="controls">
+    <button id="btn-file">[+] FILE</button>
+    <input type="file" id="file-input">
+    <input type="text" id="msg-input" placeholder="Enter encrypted message..." disabled>
+    <button id="btn-send" disabled>SEND</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="client.js"></script>
+</body>
+</html>
